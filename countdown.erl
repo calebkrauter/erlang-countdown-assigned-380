@@ -1,6 +1,6 @@
 -module(countdown).
 
--export([readTransmission/1, discoverBase/1]).
+-export([readTransmission/1, discoverBase/1, howLongDoWeHave/1, getLengthOfList/2]).
 
 readTransmission(FileName) ->
     File = openFile(file:open(FileName, read)),
@@ -38,15 +38,60 @@ readLines({ok, [{string, 1, Value}], _}, File) ->
 % 
 
 
-% Pass in list N.
-discoverBase ( N ) -> discoverBase(N, 0).
-% Pass in the list N and the base starting at 0.
-% 
+
 % D represents the current digit from left to right.
 % B represents the base we convert from.
 % P represents the position from right to left of the current Digit.
 % D1 * B^P + D2 * B^(P-1) ... D5 * B^(0)
+% Get the smallest one.
 % Recursively take remainder of the base10 value divided by 2 and store into a list.
+% 
+% 
+% "abc"
+% a * 13^2 + b * 13^1 + c * 13^0
+% 
+
+% "abc"
+% ["abc"]
+howLongDoWeHave(L) -> howLongDoWeHave(L, 0).
+howLongDoWeHave([], Result) -> Result;
+%               "abc"|[]     0                           []              "abc""abc"           "abc"  
+howLongDoWeHave([H | T], CurSmallest) -> howLongDoWeHave(T, getBaseTenOf(H, H, getLengthOfList(H, -1))).
+%            a,  bc    abc     2          a             a *       base of abc is 13^2     +              bc  abc     1
+%             b   c    abc     1          b            b *               abc is 13^1    +               c   abc     0
+%             c   []   abc     0          c            c *               12^0  \
+% my pos * pos is wrong. It should be left to power of pos
+getBaseTenOf([], _, -1) -> 0;
+getBaseTenOf([H | T], CurNum, Pos) when (H =< 57) -> (((H - 48) * math:pow(discoverBase(CurNum), Pos))) + getBaseTenOf(T, CurNum, Pos - 1);
+getBaseTenOf([H | T], CurNum, Pos) when (H >= 97) -> (((H - 87) * math:pow(discoverBase(CurNum), Pos))) + getBaseTenOf(T, CurNum, Pos - 1).
+%                a  bc
+%                b   c
+%   
+% Get length works.             
+getLengthOfList([H | T], Index) -> getLengthOfList(T, Index + 1);
+getLengthOfList([], Index) -> Index.
+
+% pow(Val, 1) -> Val; 
+% pow(Val, Exponent) -> Val * pow(Val, Exponent - 1).
+
+
+% Modify this to use for getting the smallest numerical valued element of a list.
+%     getSmallest(CurBiggestRadix, PrevBase) when (CurBiggestRadix > PrevBase)-> CurBiggestRadix;
+% getSmallest(CurBiggestRadix, PrevBase) when (CurBiggestRadix =< PrevBase)-> PrevBase;
+
+
+
+
+
+
+
+
+
+
+
+% Pass in list N.
+discoverBase ( N ) -> discoverBase(N, 0).
+% Pass in the list N and the base starting at 0.
 % 
 discoverBase([H | T], PrevBase) when (H =< 57) -> discoverBase(T, getBigestRadix(H - 48 + 1, PrevBase));
                                            
