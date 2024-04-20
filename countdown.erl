@@ -31,23 +31,29 @@ readLines({ok, [{string, 1, Value}], _}, File) ->
 % Accumulate with formula to check base. Formula is CurBase^(n-1) + C * CurBase^(n-2) + ... 
 % When the formula equals the original value, then evalute to the base.
 % 
-% 
+% 8> cd("C:/Users/Kraut/Documents/Workspace/erlang-countdown-assigned-380").
+% c:/Users/Kraut/Documents/Workspace/erlang-countdown-assigned-380
+% ok
+% 9> c(countdown).
 % 
 
 
 % Pass in list N.
-discoverBase ( N ) -> discoverBase(N, 0, 0).
+discoverBase ( N ) -> discoverBase(N, 0).
 % Pass in the list N and the base starting at 0.
 % 
 % 
 % 
-discoverBase([], _) -> [].
-discoverBase([H | T], PrevBase) when (H < 10) -> discoverBase(T, getBigestRadix(H + 1, PrevBase));
+% discoverBase([], _) -> [];
+discoverBase([H | T], PrevBase) when (H =< 57) -> discoverBase(T, getBigestRadix(H - 48 + 1, PrevBase));
                                            
-discoverBase([H | T], PrevBase) when (H >= 97) -> discoverBase(T, getBigestRadix(H - 87 + 1, PrevBase)).
+discoverBase([H | T], PrevBase) when (H >= 97) -> discoverBase(T, getBigestRadix(H - 87 + 1, PrevBase));
+discoverBase([], FinalRadix) -> FinalRadix.
 
 getBigestRadix(CurBiggestRadix, PrevBase) when (CurBiggestRadix > PrevBase)-> CurBiggestRadix;
-getBigestRadix(CurBiggestRadix, PrevBase) -> PrevBase.
+getBigestRadix(CurBiggestRadix, PrevBase) when (CurBiggestRadix =< PrevBase)-> PrevBase;
+
+getBigestRadix([], PrevBase) -> PrevBase.
 
 % convertToDecFromAlphabet ( ) convertToDecFromAlphabet ( Val ) when ( Val > 9 and Val == a ) -> 10 ; convertToDecFromAlphabet ( Val ) -> 10 + ( Val - a ) .
 
