@@ -1,6 +1,6 @@
 -module(countdown).
 
--export([readTransmission/1, discoverBase/1, howLongDoWeHave/1, getLengthOfList/2]).
+-export([readTransmission/1, discoverBase/1, howLongDoWeHave/1, getLengthOfList/2, getSmallestOfTheBaseTenValues/2]).
 
 readTransmission(FileName) ->
     File = openFile(file:open(FileName, read)),
@@ -49,6 +49,7 @@ readLines({ok, [{string, 1, Value}], _}, File) ->
 % TODO - find the smallest value in the list and convert to binary.
 % TODO - currently it returns the last element in the list's calculation to the formula.
 howLongDoWeHave(L) -> howLongDoWeHave(L, 0, []).
+% Here we can take our ResultList and determine the smallest value. Then get the binary.
 howLongDoWeHave([], Result, ResutList) -> ResutList;
 %               "abc"|[]     0                           []              "abc""abc"           "abc"  
 %                                                           This is where the result of the calculation on the last element in the list is returned.
@@ -72,6 +73,18 @@ getLengthOfList([], Index) -> Index.
 %                   
 accumListOfBaseTen(CurBaseTenVal, CurListOfBaseTen) -> accumListOfBaseTen([CurBaseTenVal | CurListOfBaseTen]).
 accumListOfBaseTen(NewList) -> NewList.
+% List is say: [2, 3, 1]. Output should be 1
+% Check first element against the second. Is 2 less than 3? If yes then recurse and check 2 against 1.
+% If not then recurse and check next against 1.
+%                             0     2    3    1          2    3                                  2   3    1
+%                             2     3    1    []         3   1     false     
+% TODO Re-make this function so that it accepts a list of values not a list of listis. Using nested const here is probably breaking it.
+getSmallestOfTheBaseTenValues(Val, [H | [H2 | T]]) when (H < H2)-> getSmallestOfTheBaseTenValues(H, [H2 | T]);
+%                             2     3    1    []         2     1                                   3   1   []
+%                             3     1    []   []   
+getSmallestOfTheBaseTenValues(Val, [H | [H2 | T]]) when (Val < H2) -> getSmallestOfTheBaseTenValues(H, [H2 | T]);
+getSmallestOfTheBaseTenValues(Val, [H | [H2 | []]]) -> getSmallestOfTheBaseTenValues(H, [H2 | []]);
+getSmallestOfTheBaseTenValues(Val, [H | [[] | []]]) -> H.
 
 % pow(Val, 1) -> Val; 
 % pow(Val, Exponent) -> Val * pow(Val, Exponent - 1).
