@@ -42,9 +42,12 @@ readLines({ok, [{string, 1, Value}], _}, File) ->
 discoverBase ( N ) -> discoverBase(N, 0).
 % Pass in the list N and the base starting at 0.
 % 
+% D represents the current digit from left to right.
+% B represents the base we convert from.
+% P represents the position from right to left of the current Digit.
+% D1 * B^P + D2 * B^(P-1) ... D5 * B^(0)
+% Recursively take remainder of the base10 value divided by 2 and store into a list.
 % 
-% 
-% discoverBase([], _) -> [];
 discoverBase([H | T], PrevBase) when (H =< 57) -> discoverBase(T, getBigestRadix(H - 48 + 1, PrevBase));
                                            
 discoverBase([H | T], PrevBase) when (H >= 97) -> discoverBase(T, getBigestRadix(H - 87 + 1, PrevBase));
