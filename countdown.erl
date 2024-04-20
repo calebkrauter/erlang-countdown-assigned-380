@@ -48,12 +48,12 @@ readLines({ok, [{string, 1, Value}], _}, File) ->
 % 
 % TODO - find the smallest value in the list and convert to binary.
 % TODO - currently it returns the last element in the list's calculation to the formula.
-howLongDoWeHave(L) -> howLongDoWeHave(L, 0).
-howLongDoWeHave([], Result) -> Result;
+howLongDoWeHave(L) -> howLongDoWeHave(L, 0, []).
+howLongDoWeHave([], Result, ResutList) -> ResutList;
 %               "abc"|[]     0                           []              "abc""abc"           "abc"  
 %                                                           This is where the result of the calculation on the last element in the list is returned.
 %                                                           This is where we need to determine the smallest of the list by accumulating to a new list the smallest value out of the values in the og list.
-howLongDoWeHave([H | T], CurSmallest) -> howLongDoWeHave(T, getBaseTenOf(H, H, getLengthOfList(H, -1))).
+howLongDoWeHave([H | T], CurSmallest, ListOfBaseTen) -> howLongDoWeHave(T, getBaseTenOf(H, H, getLengthOfList(H, -1)), accumListOfBaseTen(getBaseTenOf(H, H, getLengthOfList(H, -1)), ListOfBaseTen)).
 %            a,  bc    abc     2          a             a *       base of abc is 13^2     +              bc  abc     1
 %             b   c    abc     1          b            b *               abc is 13^1    +               c   abc     0
 %             c   []   abc     0          c            c *               12^0  \
@@ -67,6 +67,11 @@ getBaseTenOf([H | T], CurNum, Pos) when (H >= 97) -> (((H - 87) * math:pow(disco
 % Get length works.             
 getLengthOfList([H | T], Index) -> getLengthOfList(T, Index + 1);
 getLengthOfList([], Index) -> Index.
+%                   123 should be added to a list and returned.
+%                   The next time a value is generated it passes in the current list and consts them together.
+%                   
+accumListOfBaseTen(CurBaseTenVal, CurListOfBaseTen) -> accumListOfBaseTen([CurBaseTenVal | CurListOfBaseTen]).
+accumListOfBaseTen(NewList) -> NewList.
 
 % pow(Val, 1) -> Val; 
 % pow(Val, Exponent) -> Val * pow(Val, Exponent - 1).
