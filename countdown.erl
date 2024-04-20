@@ -1,6 +1,6 @@
 -module(countdown).
 
--export([readTransmission/1]).
+-export([readTransmission/1, discoverBase/1]).
 
 readTransmission(FileName) ->
     File = openFile(file:open(FileName, read)),
@@ -24,15 +24,32 @@ readLines({ok, [{string, 1, Value}], _}, File) ->
 % 123
 % |
 % val
-%
-discoverBase ( N ) -> .
+% 87 is our offset to ensure that alphabetical characters are represented in up to base 35
+% a = 97 if Val >= 97 then evaluate Val - 87. 
+% 
+% Get first atom and check if it is bigger than our biggested accumulated base. If it is then update accumulated base.
+% Accumulate with formula to check base. Formula is CurBase^(n-1) + C * CurBase^(n-2) + ... 
+% When the formula equals the original value, then evalute to the base.
+% 
+% 
+% 
 
-accumulateForMinRadix(CurRadix, LastRadix) when CurRadix > LastRadix ->
-    CurRadix;
-accumulateForMinRadix(_, LastRadix) ->
-    LastRadix.
 
-convertToDecFromAlphabet ( ) convertToDecFromAlphabet ( Val ) when ( Val > 9 and Val == a ) -> 10 ; convertToDecFromAlphabet ( Val ) -> 10 + ( Val - a ) .
+% Pass in list N.
+discoverBase ( N ) -> discoverBase(N, 0, 0).
+% Pass in the list N and the base starting at 0.
+% 
+% 
+% 
+discoverBase([], _) -> [].
+discoverBase([H | T], PrevBase) when (H < 10) -> discoverBase(T, getBigestRadix(H + 1, PrevBase));
+                                           
+discoverBase([H | T], PrevBase) when (H >= 97) -> discoverBase(T, getBigestRadix(H - 87 + 1, PrevBase)).
+
+getBigestRadix(CurBiggestRadix, PrevBase) when (CurBiggestRadix > PrevBase)-> CurBiggestRadix;
+getBigestRadix(CurBiggestRadix, PrevBase) -> PrevBase.
+
+% convertToDecFromAlphabet ( ) convertToDecFromAlphabet ( Val ) when ( Val > 9 and Val == a ) -> 10 ; convertToDecFromAlphabet ( Val ) -> 10 + ( Val - a ) .
 
 % convertToDecFromAlphabet(Val) when (Val > a) -> convertToDecFromAlphabet(10);
 
