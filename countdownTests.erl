@@ -14,4 +14,4 @@ convertToBinary_12321_test() ->
 % "howLongDoWeHave" -----------------------------------------------------
 
 howLong_test() ->
-    ?assertEqual([1,0,0,1,1,1,0,1,1], countdown:howLongDoWeHave(countdown:readTransmission("sample.txt"))).
+    ?assertEqual([1,0,0,1,1,1,0,1,1], countdown:howLongDoWeHave(countdown:readTransmission("C:/Users/Kraut/Documents/Workspace/erlang-countdown-assigned-380/sample.txt"))).
