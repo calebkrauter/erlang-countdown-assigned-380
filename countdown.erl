@@ -1,6 +1,6 @@
 -module(countdown).
 
--export([readTransmission/1, discoverBase/1, howLongDoWeHave/1, getLengthOfList/2, getSmallestOfTheBaseTenValues/2]).
+-export([readTransmission/1, discoverBase/1, howLongDoWeHave/1, getLengthOfList/2, getSmallestOfTheBaseTenValues/2, convertToBinary/1]).
 
 readTransmission(FileName) ->
     File = openFile(file:open(FileName, read)),
@@ -50,7 +50,7 @@ readLines({ok, [{string, 1, Value}], _}, File) ->
 % TODO - currently it returns the last element in the list's calculation to the formula.
 howLongDoWeHave(L) -> howLongDoWeHave(L, 0, []).
 % Here we can take our ResultList and determine the smallest value. Then get the binary.
-howLongDoWeHave([], Result, ResultList) -> getSmallestOfTheBaseTenValues(getHeadOfList(ResultList), ResultList);
+howLongDoWeHave([], Result, ResultList) -> convertToBinary(trunc(getSmallestOfTheBaseTenValues(getHeadOfList(ResultList), ResultList)));
 %               "abc"|[]     0                           []              "abc""abc"           "abc"  
 %                                                           This is where the result of the calculation on the last element in the list is returned.
 %                                                           This is where we need to determine the smallest of the list by accumulating to a new list the smallest value out of the values in the og list.
@@ -92,6 +92,8 @@ getSmallestOfTheBaseTenValues(SmallestVal, [H | T]) -> getSmallestOfTheBaseTenVa
 getSmallestOfTheBaseTenValues(SmallestVal, []) -> SmallestVal.
 
 getHeadOfList([H | _]) -> H.
+convertToBinary(0) -> [];
+convertToBinary(SmallestBaseTenValue) -> [SmallestBaseTenValue rem 2 | convertToBinary(SmallestBaseTenValue div 2)].
 % pow(Val, 1) -> Val; 
 % pow(Val, Exponent) -> Val * pow(Val, Exponent - 1).
 % Maybe tail recursion would help?
