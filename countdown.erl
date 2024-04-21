@@ -50,7 +50,7 @@ readLines({ok, [{string, 1, Value}], _}, File) ->
 % TODO - currently it returns the last element in the list's calculation to the formula.
 howLongDoWeHave(L) -> howLongDoWeHave(L, 0, []).
 % Here we can take our ResultList and determine the smallest value. Then get the binary.
-howLongDoWeHave([], Result, ResutList) -> ResutList;
+howLongDoWeHave([], Result, ResultList) -> getSmallestOfTheBaseTenValues(getHeadOfList(ResultList), ResultList);
 %               "abc"|[]     0                           []              "abc""abc"           "abc"  
 %                                                           This is where the result of the calculation on the last element in the list is returned.
 %                                                           This is where we need to determine the smallest of the list by accumulating to a new list the smallest value out of the values in the og list.
@@ -79,13 +79,19 @@ accumListOfBaseTen(NewList) -> NewList.
 %                             0     2    3    1          2    3                                  2   3    1
 %                             2     3    1    []         3   1     false     
 % TODO Re-make this function so that it accepts a list of values not a list of listis. Using nested const here is probably breaking it.
-getSmallestOfTheBaseTenValues(Val, [H | [H2 | T]]) when (H < H2)-> getSmallestOfTheBaseTenValues(H, [H2 | T]);
-%                             2     3    1    []         2     1                                   3   1   []
-%                             3     1    []   []   
-getSmallestOfTheBaseTenValues(Val, [H | [H2 | T]]) when (Val < H2) -> getSmallestOfTheBaseTenValues(H, [H2 | T]);
-getSmallestOfTheBaseTenValues(Val, [H | [H2 | []]]) -> getSmallestOfTheBaseTenValues(H, [H2 | []]);
-getSmallestOfTheBaseTenValues(Val, [H | [[] | []]]) -> H.
+% getSmallestOfTheBaseTenValues(Val, [H | [H2 | T]]) when (H < H2)-> getSmallestOfTheBaseTenValues(H, [H2 | T]);
+% %                             2     3    1    []         2     1                                   3   1   []
+% %                             3     1    []   []   
+% getSmallestOfTheBaseTenValues(Val, [H | [H2 | T]]) when (Val < H2) -> getSmallestOfTheBaseTenValues(H, [H2 | T]);
+% getSmallestOfTheBaseTenValues(Val, [H | [H2 | []]]) -> getSmallestOfTheBaseTenValues(H, [H2 | []]);
+% getSmallestOfTheBaseTenValues(Val, [H | [[] | []]]) -> H.
 
+% start with first value, compare with the next values until there is a smaller value, then update value with the smaller one and continue.
+getSmallestOfTheBaseTenValues(SmallestVal, [H | T]) when (SmallestVal =< H)-> getSmallestOfTheBaseTenValues(SmallestVal, T);
+getSmallestOfTheBaseTenValues(SmallestVal, [H | T]) -> getSmallestOfTheBaseTenValues(H, T);
+getSmallestOfTheBaseTenValues(SmallestVal, []) -> SmallestVal.
+
+getHeadOfList([H | _]) -> H.
 % pow(Val, 1) -> Val; 
 % pow(Val, Exponent) -> Val * pow(Val, Exponent - 1).
 % Maybe tail recursion would help?
