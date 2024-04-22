@@ -30,8 +30,8 @@ readLines({ok, [{string, 1, Value}], _}, File) ->
 % 20> countdown:howLongDoWeHave(["abc", "12321", "789", "1face", "z1"]).
 % [1,0,0,1,1,1,0,1,1]
 howLongDoWeHave(L) -> howLongDoWeHave(L, 0, []).
-howLongDoWeHave([], Result, ResultList) -> convertToBinary(trunc(getSmallestOfTheBaseTenValues(getHeadOfList(ResultList), ResultList)));
-howLongDoWeHave([H | T], CurSmallest, ListOfBaseTen) -> howLongDoWeHave(T, getBaseTenOf(H, H, getLengthOfList(H, -1)), accumListOfBaseTen(getBaseTenOf(H, H, getLengthOfList(H, -1)), ListOfBaseTen)).
+howLongDoWeHave([], _, ResultList) -> convertToBinary(trunc(getSmallestOfTheBaseTenValues(getHeadOfList(ResultList), ResultList)));
+howLongDoWeHave([H | T], _, ListOfBaseTen) -> howLongDoWeHave(T, getBaseTenOf(H, H, getLengthOfList(H, -1)), accumListOfBaseTen(getBaseTenOf(H, H, getLengthOfList(H, -1)), ListOfBaseTen)).
 
 getBaseTenOf([], _, -1) -> 0;
 getBaseTenOf([H | T], CurNum, Pos) when (H =< 57) -> (((H - 48) * math:pow(discoverBase(CurNum), Pos))) + getBaseTenOf(T, CurNum, Pos - 1);
@@ -41,7 +41,7 @@ getBaseTenOfWithKnownRadix([], _, -1) -> 0;
 getBaseTenOfWithKnownRadix([H | T], Radix, Pos) when (H =< 57) -> (((H - 48) * math:pow((Radix), Pos))) + getBaseTenOfWithKnownRadix(T, Radix, Pos - 1);
 getBaseTenOfWithKnownRadix([H | T], Radix, Pos) when (H >= 97) -> (((H - 87) * math:pow((Radix), Pos))) + getBaseTenOfWithKnownRadix(T, Radix, Pos - 1).
 
-getLengthOfList([H | T], Index) -> getLengthOfList(T, Index + 1);
+getLengthOfList([_ | T], Index) -> getLengthOfList(T, Index + 1);
 getLengthOfList([], Index) -> Index.
  
 accumListOfBaseTen(CurBaseTenVal, CurListOfBaseTen) -> accumListOfBaseTen([CurBaseTenVal | CurListOfBaseTen]).
@@ -49,7 +49,7 @@ accumListOfBaseTen(NewList) -> NewList.
 
 % start with first value, compare with the next values until there is a smaller value, then update value with the smaller one and continue.
 getSmallestOfTheBaseTenValues(SmallestVal, [H | T]) when (SmallestVal =< H)-> getSmallestOfTheBaseTenValues(SmallestVal, T);
-getSmallestOfTheBaseTenValues(SmallestVal, [H | T]) -> getSmallestOfTheBaseTenValues(H, T);
+getSmallestOfTheBaseTenValues(_, [H | T]) -> getSmallestOfTheBaseTenValues(H, T);
 getSmallestOfTheBaseTenValues(SmallestVal, []) -> SmallestVal.
 
 getHeadOfList([H | _]) -> H.
