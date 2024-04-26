@@ -13,20 +13,10 @@ readLines({eof, _}, _) -> [];
 readLines({ok, [{string, _, Value}], _}, File) ->
     [Value | readLines(io:parse_erl_exprs(File, ''), File)].
 
-
-% Assigned Functions %%%%%%%%%%%%%%%%%%%%%%%%
-
-% Helpers %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 % Path for testing.
 % cd("C:/Users/Kraut/Documents/Workspace/erlang-countdown-assigned-380").
 
-
 % D1 * B^P + D2 * B^(P-1) ... D5 * B^(0)
-
-% for testing
-% 20> countdown:howLongDoWeHave(["abc", "12321", "789", "1face", "z1"]).
-% [1,0,0,1,1,1,0,1,1]
 howLongDoWeHave(L) -> howLongDoWeHave(L, 0, []).
 howLongDoWeHave([], _, ResultList) -> convertToBinary(trunc(getSmallestOfTheBaseTenValues(getHeadOfList(ResultList), ResultList)));
 howLongDoWeHave([H | T], _, ListOfBaseTen) -> howLongDoWeHave(T, getBaseTenOf(H, H, getLengthOfList(H, -1)), accumListOfBaseTen(getBaseTenOf(H, H, getLengthOfList(H, -1)), ListOfBaseTen)).
@@ -64,10 +54,4 @@ getBigestRadix(CurBiggestRadix, PrevBase) when (CurBiggestRadix > PrevBase)-> Cu
 getBigestRadix(CurBiggestRadix, PrevBase) when (CurBiggestRadix =< PrevBase)-> PrevBase;
 getBigestRadix([], PrevBase) -> PrevBase.
 
-
-%  For generateBinaryConverter Do the following.
-% Take a value with an unknown radix
-% 
-% Convert with radix to base 10. Convert to binary
-%  getBaseTenOf(H, H, getLengthOfList(H, -1))
 generateBinaryConverter(R) -> fun(N) -> convertToBinary(trunc(getBaseTenOfWithKnownRadix(N, R, getLengthOfList(N, -1)))) end.

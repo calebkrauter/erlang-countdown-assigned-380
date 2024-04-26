@@ -21,14 +21,12 @@ binOr([H1 | T1], [H2 | T2]) when (H1 =:= 1 andalso H2 =:= H1) -> [1 | binOr(T1, 
 binOr([H1 | T1], [H2 | T2]) when (H1 =:= 1 orelse H2 =:= 1) -> [1 | binOr(T1, T2)];
 binOr([_ | T1], [_ | T2]) -> [0 | binOr(T1, T2)].
 
-
+% Partial attempt at working on binXor with including the first bits that go uncompared.
 % binXor([H1 | T1], BinL2) when (H1 =:= 1 andalso BinL2 =/= []) -> [H1 | binXor(T1, BinL2)];
 % binXor(BinL1, [H2 | T2]) when (H2 =:= 1 andalso BinL1 =/= [])-> [H2 | binXor(BinL1, T2)];
 % binXor([H1 | T1], BinL2) when (H1 =:= 0 andalso BinL2 =/= []) -> [H1 | binXor(T1, BinL2)];
 % binXor(BinL1, [H2 | T2]) when (H2 =:= 0 andalso BinL1 =/= [])-> [H2 | binXor(BinL1, T2)];
-% 
-% 
-% 
+
 
 binXor([], _) -> [];
 binXor(_, []) -> [];
@@ -36,6 +34,7 @@ binXor([H1 | T1], [H2 | T2]) when (H1 =:= 1 andalso H2 =/= H1) -> [1 | binXor(T1
 binXor([H1 | T1], [H2 | T2]) when (H2 =:= 1 andalso H1 =/= H2) -> [1 | binXor(T1, T2)];
 binXor([_ | T1], [_ | T2]) -> [0 | binXor(T1, T2)].
 
+% Thought process while attempting binAnd
 % INCOMPLETE
 % add:
 % [1,1,0,0,1], [1,1,0,0]

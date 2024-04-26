@@ -33,7 +33,7 @@ convertToBinary_12_test() ->
 howLong_test() ->
     ?assertEqual([1,0,0,1,1,1,0,1,1], countdown:howLongDoWeHave(countdown:readTransmission("sample.txt"))).
 howLong_1_test() ->
-    ?assertEqual([1], countdown:howLongDoWeHave(["1"])).
+    ?assertEqual([1], countdown:howLongDoWeHave(["1", "12z"])).
 howLong_12_test() ->
     ?assertEqual([1,0,1], countdown:howLongDoWeHave(["12"])).
 howLong_a_test() ->

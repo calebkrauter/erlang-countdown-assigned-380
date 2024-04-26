@@ -12,7 +12,8 @@ binNegate_111111111_test() ->
 binNegate_000000000_test() ->
     ?assertEqual([1,1,1,1,1,1,1,1,1], binaryOps:binNegate([0,0,0,0,0,0,0,0,0])).
 
-% binAnd _______________________ 0 and 0 fails because it returns [0].
+% binAnd _______________________ 0 and 0 fails because it returns [0]. 
+% And the last one fails because of leading zeros not being removed.
 binAnd_100111001_and_1100_test() ->
     ?assertEqual([1,0,0,0], binaryOps:binAnd([1,0,0,1,1,1,0,0,1], [1,1,0,0])).
 binAnd_1_and_1_test() ->
@@ -20,7 +21,7 @@ binAnd_1_and_1_test() ->
 binAnd_0_and_0_test() ->
     ?assertEqual([], binaryOps:binAnd([0], [0])).
 binAnd_011_and_110_test() ->
-    ?assertEqual([1], binaryOps:binAnd([0,1,1], [1,1,0])).
+    ?assertEqual([1,0], binaryOps:binAnd([0,1,1], [1,1,0])).
 % The following functions are close to expected. I neglected to 
 % append the first few bits that are uncompared. Initially I had a misunderstanding
 % for this part of the assignment and got stuck trying to implement it to the specs
